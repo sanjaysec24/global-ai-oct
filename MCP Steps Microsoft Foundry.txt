@@ -1,0 +1,148 @@
+In the Foundry Portal
+
+Click OpenAPI specification Tool
+
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Stock Quote API",
+    "version": "1.0.0",
+    "description": "API for retrieving stock market data from Alpha Vantage"
+  },
+  "servers": [
+    {
+      "url": "https://www.alphavantage.co"
+    }
+  ],
+  "paths": {
+    "/query": {
+      "get": {
+        "operationId": "getStockQuote",
+        "summary": "Get stock quote",
+        "description": "Retrieves the current stock price and information",
+        "parameters": [
+          {
+            "name": "function",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "GLOBAL_QUOTE"
+              ]
+            },
+            "description": "API function type"
+          },
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Stock symbol (e.g., MSFT, AAPL, GOOGL)"
+          },
+          {
+            "name": "apikey",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "<<Replace your API Key>>"
+            },
+            "description": "Your Alpha Vantage API key"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+-----------------------------------------------------------------------------------------------------------
+Instructions
+When analyzing stocks:
+1. First fetch the stock data using the get_stock_quote tool.
+2. Save the data using the stock storage-mcp tool for future reference.
+3. Analyze the data structure and key metrics.
+-----------------------------------------------------------------------------------------------------------
+Logic App Trigger
+Upload this payload as it is
+{
+  "symbol": "MSFT",
+  "price": "383.45",
+  "open": "380.50",
+  "high": "385.20",
+  "low": "378.10",
+  "volume": "25000000",
+  "tradingDay": "2026-05-01",
+  "change": "3.65",
+  "changePercent": "0.96%"
+}
+---------------------------------------------------------------------------------------------------------------
+Add in the Entity
+{
+  "PartitionKey": "@{triggerBody()?['symbol']}",
+  "RowKey": "@{utcNow()}",
+  "Symbol": "@{triggerBody()?['symbol']}",
+  "Price": "@{triggerBody()?['price']}",
+  "Open": "@{triggerBody()?['open']}",
+  "High": "@{triggerBody()?['high']}",
+  "Low": "@{triggerBody()?['low']}",
+  "Volume": "@{triggerBody()?['volume']}",
+  "TradingDay": "@{triggerBody()?['tradingDay']}",
+  "Change": "@{triggerBody()?['change']}",
+  "ChangePercent": "@{triggerBody()?['changePercent']}"
+}
+----------------------------------------------------------------------------------------------------------------
+Add in the response
+{
+  "success": true,
+  "message": "Stock data saved successfully",
+  "symbol": "@{triggerBody()?['symbol']}",
+  "price": "@{triggerBody()?['price']}",
+  "storedAt": "@{utcNow()}"
+}
+
+
+Content-Type application/json
+-----------------------------------------------------------------------------------------------------------------
+Test in the Cloud Shell
+
+Test 1
+curl -i -X POST "HTTP URL"  \
+  -H "Content-Type: application/json" \
+  -d '{"symbol":"MSFT"}'
+-----------------------------------------------------------------------------------------------------------
+Test 2
+curl -i -X POST "HTTP URL"  \
+  -H "Content-Type: application/json" \
+  -d '{
+    "symbol": "MSFT",
+    "price": "383.45",
+    "open": "380.50",
+    "high": "385.20",
+    "low": "378.10",
+    "volume": "25000000",
+    "tradingDay": "2026-05-01",
+    "change": "3.65",
+    "changePercent": "0.96%"
+  }'
+
+------------------------------------------------------------------------------------------------------------
+Foundry Portal
+
+credential
+X-API-KEY
+--------------------------------------------------------------------------------------------------------------
