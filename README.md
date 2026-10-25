@@ -202,6 +202,3 @@ Do not describe this step as complete until the remote MCP tool is visible to th
 - [Microsoft Learn: Create a remote MCP server from a Standard workflow](https://learn.microsoft.com/en-us/azure/logic-apps/create-model-context-protocol-server-standard)
 
 ---
-
-**Author:** Sanjay Kumar  
-**Status:** Educational prototype / in progress
