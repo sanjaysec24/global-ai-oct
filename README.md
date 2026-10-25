@@ -1,5 +1,7 @@
 # Stock Quote Agent with MCP and Azure Logic Apps
 
+## **Author:** SanjayKumar B 
+## **Status:** Educational prototype
 > **Project status:** In progress  
 > **Goal:** Build an AI stock-quote assistant that retrieves stock data, saves successful quotes to Azure Table Storage, and exposes workflow capabilities to an AI agent through the Model Context Protocol (MCP).
 
